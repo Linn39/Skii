@@ -1,0 +1,25 @@
+# --- Xcode ---
+# User-specific settings (Window positions, open files)
+xcuserdata/
+
+# Build artifacts and derived data
+DerivedData/
+build/
+*.moved-aside
+
+# --- Swift Package Manager ---
+# This is like your node_modules - the code is fetched from GitHub
+.build/
+.swiftpm/
+
+# --- macOS ---
+.DS_Store
+
+# --- Git ---
+# Ignore tags created by some IDEs
+*.swp
+*.lock
+
+# --- docs ---
+assets/
+
