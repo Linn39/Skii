@@ -401,7 +401,7 @@ final class SkiScene: SKScene {
     }
 
     private var currentInterfaceOrientation: UIInterfaceOrientation {
-        view?.window?.windowScene?.interfaceOrientation ?? .landscapeRight
+        view?.window?.windowScene?.effectiveGeometry.interfaceOrientation ?? .landscapeRight
     }
 
     private func textures(for tileIDs: [Int]) -> [SKTexture] {
