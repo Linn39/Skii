@@ -28,6 +28,11 @@ final class SkiScene: SKScene {
     private var snowEmitter: SKEmitterNode?
     private var distanceLabel: SKLabelNode?
     private var gameOverLabel: SKLabelNode?
+    private var heartSprites: [SKSpriteNode] = []
+
+    private let maxLives = 3
+    private var lives = 3
+    private var invulnerableUntil: TimeInterval = 0
 
     private var lastUpdateTime: TimeInterval = 0
     private var treeSpawnAccumulator: TimeInterval = 0
@@ -48,6 +53,8 @@ final class SkiScene: SKScene {
     private lazy var tileSheetTexture = SKTexture(imageNamed: TileSheet.resourceName)
     private lazy var snowTextures = textures(for: [1, 2, 3, 4, 5, 6])
     private lazy var treeTextures = textures(for: [7, 8, 19, 20])
+    private lazy var redHeartTexture = SKTexture(imageNamed: "pixel_heart_red")
+    private lazy var grayHeartTexture = SKTexture(imageNamed: "pixel_heart_gray")
 
     override init(size: CGSize) {
         super.init(size: size)
@@ -117,6 +124,8 @@ final class SkiScene: SKScene {
         treeNodes.removeAll()
         distanceTravelled = 0
         lateralVelocity = 0
+        lives = maxLives
+        invulnerableUntil = 0
         isGameOver = false
 
         setupSnowBackground()
@@ -321,14 +330,39 @@ final class SkiScene: SKScene {
 
     private func checkTreeCollisions() {
         guard let skierNode else { return }
+        guard lastUpdateTime >= invulnerableUntil else { return }
 
         let skierFrame = skierNode.calculateAccumulatedFrame().insetBy(dx: 14, dy: 10)
-        let hitTree = treeNodes.contains { tree in
+        let collidingTrees = treeNodes.filter { tree in
             tree.calculateAccumulatedFrame().insetBy(dx: 14, dy: 12).intersects(skierFrame)
         }
 
-        if hitTree {
+        guard !collidingTrees.isEmpty else { return }
+
+        for tree in collidingTrees {
+            tree.removeFromParent()
+        }
+        treeNodes.removeAll { collidingTrees.contains($0) }
+
+        loseLife()
+    }
+
+    private func loseLife() {
+        guard lives > 0 else { return }
+
+        lives -= 1
+        updateHeartDisplay()
+
+        skierNode?.run(.sequence([
+            .rotate(byAngle: 0.45, duration: 0.12),
+            .rotate(byAngle: -0.9, duration: 0.2),
+            .rotate(byAngle: 0.45, duration: 0.12)
+        ]))
+
+        if lives <= 0 {
             endRun()
+        } else {
+            invulnerableUntil = lastUpdateTime + 1.5
         }
     }
 
@@ -337,11 +371,6 @@ final class SkiScene: SKScene {
 
         isGameOver = true
         lateralVelocity = 0
-        skierNode?.run(.sequence([
-            .rotate(byAngle: 0.45, duration: 0.12),
-            .rotate(byAngle: -0.9, duration: 0.2),
-            .rotate(byAngle: 0.45, duration: 0.12)
-        ]))
 
         let label = SKLabelNode(fontNamed: "AvenirNext-Bold")
         label.text = "Crash! Tap to ski again"
@@ -369,6 +398,38 @@ final class SkiScene: SKScene {
         hudLayer.addChild(label)
         distanceLabel = label
         updateDistanceLabel()
+        setupHearts()
+    }
+
+    private func setupHearts() {
+        heartSprites.removeAll()
+
+        let heartSize = CGSize(width: 28, height: 28)
+        let spacing: CGFloat = 6
+        let margin: CGFloat = 16
+
+        redHeartTexture.filteringMode = .nearest
+        grayHeartTexture.filteringMode = .nearest
+
+        for index in 0..<maxLives {
+            let heart = SKSpriteNode(texture: redHeartTexture)
+            heart.size = heartSize
+            heart.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            heart.position = CGPoint(
+                x: size.width - margin - heartSize.width * 0.5 - CGFloat(maxLives - 1 - index) * (heartSize.width + spacing),
+                y: margin + heartSize.height * 0.5
+            )
+            heart.zPosition = 1
+            hudLayer.addChild(heart)
+            heartSprites.append(heart)
+        }
+    }
+
+    private func updateHeartDisplay() {
+        for index in 0..<maxLives {
+            let isAlive = index < lives
+            heartSprites[index].texture = isAlive ? redHeartTexture : grayHeartTexture
+        }
     }
 
     private func updateDistanceLabel() {

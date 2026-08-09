@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		40F542242F3934F00043E999 /* tilemap.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F542232F3934F00043E999 /* tilemap.png */; };
+		40F542262F3934F00043E999 /* pixel_heart_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F542252F3934F00043E999 /* pixel_heart_red.png */; };
+		40F542282F3934F00043E999 /* pixel_heart_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F542272F3934F00043E999 /* pixel_heart_gray.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +34,8 @@
 		40F542062F3934F00043E999 /* SkiiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SkiiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		40F542102F3934F00043E999 /* SkiiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SkiiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		40F542232F3934F00043E999 /* tilemap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "assets/kenney_tiny-ski/Tilemap/tilemap.png"; sourceTree = "<group>"; };
+		40F542252F3934F00043E999 /* pixel_heart_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = assets/pixel_heart_red.png; sourceTree = "<group>"; };
+		40F542272F3934F00043E999 /* pixel_heart_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = assets/pixel_heart_gray.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -84,6 +88,8 @@
 				40F542092F3934F00043E999 /* SkiiTests */,
 				40F542132F3934F00043E999 /* SkiiUITests */,
 				40F542232F3934F00043E999 /* tilemap.png */,
+				40F542252F3934F00043E999 /* pixel_heart_red.png */,
+				40F542272F3934F00043E999 /* pixel_heart_gray.png */,
 				40F541FA2F3934F00043E999 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -219,6 +225,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				40F542242F3934F00043E999 /* tilemap.png in Resources */,
+				40F542262F3934F00043E999 /* pixel_heart_red.png in Resources */,
+				40F542282F3934F00043E999 /* pixel_heart_gray.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
