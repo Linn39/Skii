@@ -19,7 +19,3 @@ build/
 # Ignore tags created by some IDEs
 *.swp
 *.lock
-
-# --- docs ---
-assets/
-
