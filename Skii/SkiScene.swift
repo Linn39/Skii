@@ -21,6 +21,7 @@ final class SkiScene: SKScene {
     private let obstacleLayer = SKNode()
     private let skierLayer = SKNode()
     private let hudLayer = SKNode()
+    private let hitFlash = SKSpriteNode(color: SKColor(red: 1, green: 0.15, blue: 0.15, alpha: 1), size: .zero)
 
     private var snowPages: [SKNode] = []
     private var treeNodes: [SKNode] = []
@@ -79,11 +80,14 @@ final class SkiScene: SKScene {
         addChild(obstacleLayer)
         addChild(skierLayer)
         addChild(hudLayer)
+        addChild(hitFlash)
 
         backgroundLayer.zPosition = 0
         obstacleLayer.zPosition = 10
         skierLayer.zPosition = 20
         hudLayer.zPosition = 40
+        hitFlash.anchorPoint = .zero
+        hitFlash.zPosition = 50
 
         rebuildSceneForCurrentSize()
         startMotionUpdates()
@@ -127,6 +131,9 @@ final class SkiScene: SKScene {
         lives = maxLives
         invulnerableUntil = 0
         isGameOver = false
+        hitFlash.removeAllActions()
+        hitFlash.alpha = 0
+        hitFlash.size = size
 
         setupSnowBackground()
         setupSkier()
@@ -352,6 +359,7 @@ final class SkiScene: SKScene {
 
         lives -= 1
         updateHeartDisplay()
+        blinkScreen()
 
         skierNode?.run(.sequence([
             .rotate(byAngle: 0.45, duration: 0.12),
@@ -364,6 +372,16 @@ final class SkiScene: SKScene {
         } else {
             invulnerableUntil = lastUpdateTime + 1.5
         }
+    }
+
+    private func blinkScreen() {
+        hitFlash.removeAllActions()
+        hitFlash.alpha = 0
+        let blink = SKAction.sequence([
+            .fadeAlpha(to: 0.5, duration: 0.1),
+            .fadeOut(withDuration: 0.1)
+        ])
+        hitFlash.run(.repeat(blink, count: 3))
     }
 
     private func endRun() {
