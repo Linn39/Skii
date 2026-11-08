@@ -34,6 +34,7 @@ final class SkiScene: SKScene {
     private let maxLives = 3
     private var lives = 3
     private var invulnerableUntil: TimeInterval = 0
+    private var isBlinking = false
 
     private var lastUpdateTime: TimeInterval = 0
     private var treeSpawnAccumulator: TimeInterval = 0
@@ -106,7 +107,7 @@ final class SkiScene: SKScene {
 
         guard deltaTime > 0 else { return }
 
-        guard !isGameOver else { return }
+        guard !isGameOver, !isBlinking else { return }
 
         updateSkier(deltaTime: CGFloat(deltaTime))
         distanceTravelled += CGFloat(deltaTime) * scrollSpeed
@@ -130,10 +131,15 @@ final class SkiScene: SKScene {
         lateralVelocity = 0
         lives = maxLives
         invulnerableUntil = 0
+        isBlinking = false
         isGameOver = false
         hitFlash.removeAllActions()
         hitFlash.alpha = 0
         hitFlash.size = size
+        backgroundLayer.isPaused = false
+        obstacleLayer.isPaused = false
+        skierLayer.isPaused = false
+        snowEmitter?.isPaused = false
 
         setupSnowBackground()
         setupSkier()
@@ -359,7 +365,6 @@ final class SkiScene: SKScene {
 
         lives -= 1
         updateHeartDisplay()
-        blinkScreen()
 
         skierNode?.run(.sequence([
             .rotate(byAngle: 0.45, duration: 0.12),
@@ -367,6 +372,34 @@ final class SkiScene: SKScene {
             .rotate(byAngle: 0.45, duration: 0.12)
         ]))
 
+        blinkScreen()
+    }
+
+    private func blinkScreen() {
+        isBlinking = true
+        backgroundLayer.isPaused = true
+        obstacleLayer.isPaused = true
+        skierLayer.isPaused = true
+        snowEmitter?.isPaused = true
+        hitFlash.removeAllActions()
+        hitFlash.alpha = 0
+        let blink = SKAction.sequence([
+            .fadeAlpha(to: 0.5, duration: 0.1),
+            .fadeOut(withDuration: 0.1)
+        ])
+        hitFlash.run(.sequence([
+            .repeat(blink, count: 3),
+            .run { [weak self] in self?.finishBlink() }
+        ]))
+    }
+
+    private func finishBlink() {
+        guard isBlinking else { return }
+        isBlinking = false
+        backgroundLayer.isPaused = false
+        obstacleLayer.isPaused = false
+        skierLayer.isPaused = false
+        snowEmitter?.isPaused = false
         if lives <= 0 {
             endRun()
         } else {
@@ -374,17 +407,8 @@ final class SkiScene: SKScene {
         }
     }
 
-    private func blinkScreen() {
-        hitFlash.removeAllActions()
-        hitFlash.alpha = 0
-        let blink = SKAction.sequence([
-            .fadeAlpha(to: 0.5, duration: 0.1),
-            .fadeOut(withDuration: 0.1)
-        ])
-        hitFlash.run(.repeat(blink, count: 3))
-    }
-
     private func endRun() {
+
         guard !isGameOver else { return }
 
         isGameOver = true
