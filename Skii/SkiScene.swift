@@ -28,6 +28,7 @@ final class SkiScene: SKScene {
     private var skierNode: SKNode?
     private var snowEmitter: SKEmitterNode?
     private var distanceLabel: SKLabelNode?
+    private var startLabel: SKLabelNode?
     private var gameOverLabel: SKLabelNode?
     private var heartSprites: [SKSpriteNode] = []
 
@@ -41,6 +42,7 @@ final class SkiScene: SKScene {
     private var distanceTravelled: CGFloat = 0
     private var lateralTilt: CGFloat = 0
     private var lateralVelocity: CGFloat = 0
+    private var isGameStarted = false
     private var isGameOver = false
 
     private let motionManager = CMMotionManager()
@@ -117,7 +119,7 @@ final class SkiScene: SKScene {
 
         guard deltaTime > 0 else { return }
 
-        guard !isGameOver, !isBlinking else { return }
+        guard isGameStarted, !isGameOver, !isBlinking else { return }
 
         updateSkier(deltaTime: CGFloat(deltaTime))
         distanceTravelled += CGFloat(deltaTime) * scrollSpeed
@@ -142,6 +144,7 @@ final class SkiScene: SKScene {
         lives = maxLives
         invulnerableUntil = 0
         isBlinking = false
+        isGameStarted = false
         isGameOver = false
         hitFlash.removeAllActions()
         hitFlash.alpha = 0
@@ -155,6 +158,7 @@ final class SkiScene: SKScene {
         setupSkier()
         setupSnowEmitter()
         setupHUD()
+        snowEmitter?.isPaused = true
         lastUpdateTime = 0
         treeSpawnAccumulator = 0
     }
@@ -437,6 +441,11 @@ final class SkiScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if isGameOver {
             rebuildSceneForCurrentSize()
+        } else if !isGameStarted {
+            isGameStarted = true
+            startLabel?.removeFromParent()
+            startLabel = nil
+            snowEmitter?.isPaused = false
         }
     }
 
@@ -451,6 +460,17 @@ final class SkiScene: SKScene {
         distanceLabel = label
         updateDistanceLabel()
         setupHearts()
+
+        let prompt = SKLabelNode(fontNamed: "AvenirNext-Bold")
+        prompt.text = "Tap screen to start"
+        prompt.fontSize = 26
+        prompt.fontColor = .black
+        prompt.horizontalAlignmentMode = .center
+        prompt.verticalAlignmentMode = .center
+        prompt.position = CGPoint(x: size.width * 0.5, y: size.height * 0.55)
+        prompt.zPosition = 2
+        hudLayer.addChild(prompt)
+        startLabel = prompt
     }
 
     private func setupHearts() {
