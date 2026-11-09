@@ -10,6 +10,15 @@
 		40F542242F3934F00043E999 /* tilemap.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F542232F3934F00043E999 /* tilemap.png */; };
 		40F542262F3934F00043E999 /* pixel_heart_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F542252F3934F00043E999 /* pixel_heart_red.png */; };
 		40F542282F3934F00043E999 /* pixel_heart_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 40F542272F3934F00043E999 /* pixel_heart_gray.png */; };
+		40F542292F3934F00043E999 /* finish.wav in Resources */ = {isa = PBXBuildFile; fileRef = 40F542322F3934F00043E999 /* finish.wav */; };
+		40F5422A2F3934F00043E999 /* pickup.wav in Resources */ = {isa = PBXBuildFile; fileRef = 40F542332F3934F00043E999 /* pickup.wav */; };
+		40F5422B2F3934F00043E999 /* ski_carve.wav in Resources */ = {isa = PBXBuildFile; fileRef = 40F542342F3934F00043E999 /* ski_carve.wav */; };
+		40F5422C2F3934F00043E999 /* ski_crash.wav in Resources */ = {isa = PBXBuildFile; fileRef = 40F542352F3934F00043E999 /* ski_crash.wav */; };
+		40F5422D2F3934F00043E999 /* ski_glide_loop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 40F542362F3934F00043E999 /* ski_glide_loop.wav */; };
+		40F5422E2F3934F00043E999 /* ski_jump.wav in Resources */ = {isa = PBXBuildFile; fileRef = 40F542372F3934F00043E999 /* ski_jump.wav */; };
+		40F5422F2F3934F00043E999 /* ski_land.wav in Resources */ = {isa = PBXBuildFile; fileRef = 40F542382F3934F00043E999 /* ski_land.wav */; };
+		40F542302F3934F00043E999 /* ui_confirm.wav in Resources */ = {isa = PBXBuildFile; fileRef = 40F542392F3934F00043E999 /* ui_confirm.wav */; };
+		40F542312F3934F00043E999 /* ui_select.wav in Resources */ = {isa = PBXBuildFile; fileRef = 40F5423A2F3934F00043E999 /* ui_select.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +45,15 @@
 		40F542232F3934F00043E999 /* tilemap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "assets/kenney_tiny-ski/Tilemap/tilemap.png"; sourceTree = "<group>"; };
 		40F542252F3934F00043E999 /* pixel_heart_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = assets/pixel_heart_red.png; sourceTree = "<group>"; };
 		40F542272F3934F00043E999 /* pixel_heart_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = assets/pixel_heart_gray.png; sourceTree = "<group>"; };
+		40F542322F3934F00043E999 /* finish.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Skii/Audio/finish.wav; sourceTree = "<group>"; };
+		40F542332F3934F00043E999 /* pickup.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Skii/Audio/pickup.wav; sourceTree = "<group>"; };
+		40F542342F3934F00043E999 /* ski_carve.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Skii/Audio/ski_carve.wav; sourceTree = "<group>"; };
+		40F542352F3934F00043E999 /* ski_crash.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Skii/Audio/ski_crash.wav; sourceTree = "<group>"; };
+		40F542362F3934F00043E999 /* ski_glide_loop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Skii/Audio/ski_glide_loop.wav; sourceTree = "<group>"; };
+		40F542372F3934F00043E999 /* ski_jump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Skii/Audio/ski_jump.wav; sourceTree = "<group>"; };
+		40F542382F3934F00043E999 /* ski_land.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Skii/Audio/ski_land.wav; sourceTree = "<group>"; };
+		40F542392F3934F00043E999 /* ui_confirm.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Skii/Audio/ui_confirm.wav; sourceTree = "<group>"; };
+		40F5423A2F3934F00043E999 /* ui_select.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Skii/Audio/ui_select.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -90,6 +108,15 @@
 				40F542232F3934F00043E999 /* tilemap.png */,
 				40F542252F3934F00043E999 /* pixel_heart_red.png */,
 				40F542272F3934F00043E999 /* pixel_heart_gray.png */,
+				40F542322F3934F00043E999 /* finish.wav */,
+				40F542332F3934F00043E999 /* pickup.wav */,
+				40F542342F3934F00043E999 /* ski_carve.wav */,
+				40F542352F3934F00043E999 /* ski_crash.wav */,
+				40F542362F3934F00043E999 /* ski_glide_loop.wav */,
+				40F542372F3934F00043E999 /* ski_jump.wav */,
+				40F542382F3934F00043E999 /* ski_land.wav */,
+				40F542392F3934F00043E999 /* ui_confirm.wav */,
+				40F5423A2F3934F00043E999 /* ui_select.wav */,
 				40F541FA2F3934F00043E999 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -227,6 +254,15 @@
 				40F542242F3934F00043E999 /* tilemap.png in Resources */,
 				40F542262F3934F00043E999 /* pixel_heart_red.png in Resources */,
 				40F542282F3934F00043E999 /* pixel_heart_gray.png in Resources */,
+				40F542292F3934F00043E999 /* finish.wav in Resources */,
+				40F5422A2F3934F00043E999 /* pickup.wav in Resources */,
+				40F5422B2F3934F00043E999 /* ski_carve.wav in Resources */,
+				40F5422C2F3934F00043E999 /* ski_crash.wav in Resources */,
+				40F5422D2F3934F00043E999 /* ski_glide_loop.wav in Resources */,
+				40F5422E2F3934F00043E999 /* ski_jump.wav in Resources */,
+				40F5422F2F3934F00043E999 /* ski_land.wav in Resources */,
+				40F542302F3934F00043E999 /* ui_confirm.wav in Resources */,
+				40F542312F3934F00043E999 /* ui_select.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

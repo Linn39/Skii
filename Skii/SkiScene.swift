@@ -6,6 +6,7 @@
 import SpriteKit
 import CoreMotion
 import UIKit
+import AVFoundation
 
 final class SkiScene: SKScene {
     private enum TileSheet {
@@ -36,6 +37,8 @@ final class SkiScene: SKScene {
     private var lives = 3
     private var invulnerableUntil: TimeInterval = 0
     private var isBlinking = false
+    private var carvedTreeIDs = Set<ObjectIdentifier>()
+    private var glidePlayer: AVAudioPlayer?
 
     private var lastUpdateTime: TimeInterval = 0
     private var treeSpawnAccumulator: TimeInterval = 0
@@ -72,6 +75,7 @@ final class SkiScene: SKScene {
     }
 
     deinit {
+        glidePlayer?.stop()
         motionManager.stopDeviceMotionUpdates()
         motionManager.stopAccelerometerUpdates()
     }
@@ -79,6 +83,7 @@ final class SkiScene: SKScene {
     override func didMove(to view: SKView) {
         // Gameplay should keep the display awake while this scene is attached.
         UIApplication.shared.isIdleTimerDisabled = true
+        configureAudioSession()
 
         removeAllChildren()
 
@@ -101,6 +106,8 @@ final class SkiScene: SKScene {
 
     override func willMove(from view: SKView) {
         super.willMove(from: view)
+
+        stopGlideSound()
 
         // Restore the system default when the game scene is no longer visible.
         UIApplication.shared.isIdleTimerDisabled = false
@@ -139,6 +146,7 @@ final class SkiScene: SKScene {
         hudLayer.removeAllChildren()
         snowPages.removeAll()
         treeNodes.removeAll()
+        carvedTreeIDs.removeAll()
         distanceTravelled = 0
         lateralVelocity = 0
         lives = maxLives
@@ -360,8 +368,17 @@ final class SkiScene: SKScene {
         guard lastUpdateTime >= invulnerableUntil else { return }
 
         let skierFrame = skierNode.calculateAccumulatedFrame().insetBy(dx: 14, dy: 10)
+        let nearMissFrame = skierFrame.insetBy(dx: -12, dy: -12)
         let collidingTrees = treeNodes.filter { tree in
             tree.calculateAccumulatedFrame().insetBy(dx: 14, dy: 12).intersects(skierFrame)
+        }
+
+        for tree in treeNodes where !collidingTrees.contains(tree) {
+            let treeID = ObjectIdentifier(tree)
+            if !carvedTreeIDs.contains(treeID), tree.calculateAccumulatedFrame().intersects(nearMissFrame) {
+                carvedTreeIDs.insert(treeID)
+                playOneShot(named: "ski_carve.wav")
+            }
         }
 
         guard !collidingTrees.isEmpty else { return }
@@ -379,6 +396,7 @@ final class SkiScene: SKScene {
 
         lives -= 1
         updateHeartDisplay()
+        playOneShot(named: "ski_crash.wav")
 
         skierNode?.run(.sequence([
             .rotate(byAngle: 0.45, duration: 0.12),
@@ -427,6 +445,8 @@ final class SkiScene: SKScene {
 
         isGameOver = true
         lateralVelocity = 0
+        stopGlideSound()
+        playOneShot(named: "finish.wav")
 
         let label = SKLabelNode(fontNamed: "AvenirNext-Bold")
         label.text = "Crash! Tap to ski again"
@@ -446,7 +466,47 @@ final class SkiScene: SKScene {
             startLabel?.removeFromParent()
             startLabel = nil
             snowEmitter?.isPaused = false
+            playOneShot(named: "ui_confirm.wav")
+            startGlideSound()
         }
+    }
+
+    private func playOneShot(named filename: String) {
+        run(.playSoundFileNamed(filename, waitForCompletion: false))
+    }
+
+    private func configureAudioSession() {
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(.playback, mode: .gameChat, options: [.mixWithOthers])
+            try session.setActive(true)
+        } catch {
+            // Audio playback remains optional; the game should still run if the
+            // device cannot activate an audio session.
+        }
+    }
+
+    private func startGlideSound() {
+        guard glidePlayer == nil,
+              let url = Bundle.main.url(forResource: "ski_glide_loop", withExtension: "wav") else {
+            return
+        }
+
+        do {
+            let player = try AVAudioPlayer(contentsOf: url)
+            player.numberOfLoops = -1
+            player.volume = 0.35
+            player.prepareToPlay()
+            player.play()
+            glidePlayer = player
+        } catch {
+            glidePlayer = nil
+        }
+    }
+
+    private func stopGlideSound() {
+        glidePlayer?.stop()
+        glidePlayer = nil
     }
 
     private func setupHUD() {
