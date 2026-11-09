@@ -448,15 +448,36 @@ final class SkiScene: SKScene {
         stopGlideSound()
         playOneShot(named: "finish.wav")
 
+        let panelWidth = min(size.width - 32, 460)
+        let panel = SKShapeNode(rectOf: CGSize(width: panelWidth, height: 96), cornerRadius: 12)
+        panel.fillColor = .white
+        panel.strokeColor = .clear
+        panel.alpha = 0.55
+        let panelCenter = CGPoint(x: size.width * 0.5, y: size.height * 0.60)
+        panel.position = panelCenter
+        panel.zPosition = 0.5
+        hudLayer.addChild(panel)
+
         let label = SKLabelNode(fontNamed: "AvenirNext-Bold")
-        label.text = "Finished! Tap to ski again\nDistance: \(Int(distanceTravelled / 10)) m"
+        label.text = "Finished! Tap to ski again"
         label.fontSize = 24
         label.fontColor = .black
         label.horizontalAlignmentMode = .center
-        label.position = CGPoint(x: size.width * 0.5, y: size.height * 0.62)
+        label.verticalAlignmentMode = .center
+        label.position = CGPoint(x: panelCenter.x, y: panelCenter.y + 20)
         label.zPosition = 1
         hudLayer.addChild(label)
         gameOverLabel = label
+
+        let distanceLabel = SKLabelNode(fontNamed: "AvenirNext-Bold")
+        distanceLabel.text = "Distance: \(Int(distanceTravelled / 10)) m"
+        distanceLabel.fontSize = 24
+        distanceLabel.fontColor = .black
+        distanceLabel.horizontalAlignmentMode = .center
+        distanceLabel.verticalAlignmentMode = .center
+        distanceLabel.position = CGPoint(x: panelCenter.x, y: panelCenter.y - 20)
+        distanceLabel.zPosition = 1
+        hudLayer.addChild(distanceLabel)
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -511,12 +532,21 @@ final class SkiScene: SKScene {
     }
 
     private func setupHUD() {
+        let distancePanel = SKShapeNode(rectOf: CGSize(width: 92, height: 36), cornerRadius: 8)
+        distancePanel.fillColor = .white
+        distancePanel.strokeColor = .clear
+        distancePanel.alpha = 0.55
+        distancePanel.position = CGPoint(x: 62, y: size.height - 28)
+        distancePanel.zPosition = 0.5
+        hudLayer.addChild(distancePanel)
+
         let label = SKLabelNode(fontNamed: "AvenirNext-Bold")
         label.fontSize = 20
         label.fontColor = .black
-        label.horizontalAlignmentMode = .left
-        label.verticalAlignmentMode = .top
-        label.position = CGPoint(x: 16, y: size.height - 24)
+        label.horizontalAlignmentMode = .center
+        label.verticalAlignmentMode = .center
+        label.position = distancePanel.position
+        label.zPosition = 1
         hudLayer.addChild(label)
         distanceLabel = label
         updateDistanceLabel()
@@ -550,7 +580,7 @@ final class SkiScene: SKScene {
             heart.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             heart.position = CGPoint(
                 x: size.width - margin - heartSize.width * 0.5 - CGFloat(maxLives - 1 - index) * (heartSize.width + spacing),
-                y: margin + heartSize.height * 0.5
+                y: size.height - margin - heartSize.height * 0.5
             )
             heart.zPosition = 1
             hudLayer.addChild(heart)
@@ -566,7 +596,7 @@ final class SkiScene: SKScene {
     }
 
     private func updateDistanceLabel() {
-        distanceLabel?.text = "Distance \(Int(distanceTravelled / 10)) m"
+        distanceLabel?.text = "\(Int(distanceTravelled / 10)) m"
     }
 
     private func clampedTilt(_ tilt: CGFloat) -> CGFloat {
