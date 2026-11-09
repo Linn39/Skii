@@ -75,6 +75,9 @@ final class SkiScene: SKScene {
     }
 
     override func didMove(to view: SKView) {
+        // Gameplay should keep the display awake while this scene is attached.
+        UIApplication.shared.isIdleTimerDisabled = true
+
         removeAllChildren()
 
         addChild(backgroundLayer)
@@ -92,6 +95,13 @@ final class SkiScene: SKScene {
 
         rebuildSceneForCurrentSize()
         startMotionUpdates()
+    }
+
+    override func willMove(from view: SKView) {
+        super.willMove(from: view)
+
+        // Restore the system default when the game scene is no longer visible.
+        UIApplication.shared.isIdleTimerDisabled = false
     }
 
     override func didChangeSize(_ oldSize: CGSize) {
