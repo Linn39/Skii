@@ -488,8 +488,13 @@ final class SkiScene: SKScene {
             startLabel?.removeFromParent()
             startLabel = nil
             snowEmitter?.isPaused = false
-            playOneShot(named: "ui_confirm.wav")
-            startGlideSound()
+            run(.sequence([
+                .playSoundFileNamed("ui_confirm.wav", waitForCompletion: true),
+                .run { [weak self] in
+                    guard let self, self.isGameStarted, !self.isGameOver else { return }
+                    self.startGlideSound()
+                }
+            ]))
         }
     }
 
