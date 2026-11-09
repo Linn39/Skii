@@ -449,9 +449,10 @@ final class SkiScene: SKScene {
         playOneShot(named: "finish.wav")
 
         let label = SKLabelNode(fontNamed: "AvenirNext-Bold")
-        label.text = "Crash! Tap to ski again"
+        label.text = "Finished! Tap to ski again\nDistance: \(Int(distanceTravelled / 10)) m"
         label.fontSize = 24
         label.fontColor = .black
+        label.horizontalAlignmentMode = .center
         label.position = CGPoint(x: size.width * 0.5, y: size.height * 0.62)
         label.zPosition = 1
         hudLayer.addChild(label)
